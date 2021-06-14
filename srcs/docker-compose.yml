@@ -1,0 +1,90 @@
+version: '3'
+
+services:
+
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    container_name: wordpress
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+    ports:
+      - "9000"
+    volumes:
+      - /home/ayzapata/data/wordpress:/var/www/html
+    depends_on:
+      - mysqldb
+    networks:
+      - my_inception_net
+    # restart: on-failure
+
+  nginx:
+    build:
+      context: ./requirements/nginx
+    container_name: nginx
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+    ports:
+      - "443:443"
+    volumes:
+      - /home/ayzapata/data/wordpress:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+      - my_inception_net
+    # restart: on-failure
+
+  mysqldb:
+    build:
+      context: ./requirements/mariadb
+    container_name: mysqldb
+    env_file: 
+      - .env
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+    ports:
+      - "3306"
+    volumes:
+      - /home/ayzapata/data/mysqldata:/var/lib/mysql
+    # restart: on-failure
+    networks:
+      - my_inception_net
+
+  adminer:
+    build:
+      context: ./requirements/adminer
+    container_name: adminer
+    env_file: 
+      - .env
+    environment:
+      ADMINER_DEFAULT_SERVER: mysqldb
+      ADMINER_DESIGN: vane
+    ports:
+      - "3306"
+    networks:
+      - my_inception_net
+    # restart: on-failure
+
+networks:
+  my_inception_net:
+    driver: bridge
+
+# volumes:
+#     mysqldata: 
+#     wordpress: 

@@ -3,14 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ayzapata <ayzapata@student.42.fr>          +#+  +:+       +#+         #
+#    By: avanezc <avanezc@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/22 13:53:20 by ayzapata          #+#    #+#              #
-#    Updated: 2021/06/04 12:38:21 by ayzapata         ###   ########.fr        #
+#    Updated: 2021/06/16 12:34:51 by avanezc          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = /home/user42/Bureau/inception/srcs
+# SRCS = /home/user42/Bureau/inception/srcs
+SRCS = ./srcs
+
 HOME = /home
 USER = /ayzapata
 
@@ -22,8 +24,8 @@ build:	# Build the images
 		@cd $(SRCS) && docker-compose build
 
 up: 	
-		@service nginx stop
-		@service mysql stop
+		# @service nginx stop
+		# @service mysql stop
 		@cd $(SRCS) && docker-compose up -d
 
 down: 	

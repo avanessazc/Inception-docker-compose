@@ -9,19 +9,25 @@ services:
     env_file:
       - .env
     environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
+      WORDPRESS_DB_USER2: ${WORDPRESS_DB_USER2}
+      WORDPRESS_USER2_EMAIL: ${WORDPRESS_USER2_EMAIL}
+      WORDPRESS_USER2_PASSWORD2: ${WORDPRESS_USER2_PASSWORD2}
     ports:
       - "9000"
     volumes:
-      - /home/ayzapata/data/wordpress:/var/www/html
+      - ./wordpress:/var/www/html
+      # - /home/ayzapata/data/wordpress:/var/www/html
     depends_on:
       - mysqldb
     networks:
       - my_inception_net
-    # restart: on-failure
+    restart: on-failure
 
   nginx:
     build:
@@ -30,19 +36,25 @@ services:
     env_file:
       - .env
     environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
+      WORDPRESS_DB_USER2: ${WORDPRESS_DB_USER2}
+      WORDPRESS_USER2_EMAIL: ${WORDPRESS_USER2_EMAIL}
+      WORDPRESS_USER2_PASSWORD2: ${WORDPRESS_USER2_PASSWORD2}
     ports:
       - "443:443"
     volumes:
-      - /home/ayzapata/data/wordpress:/var/www/html
+      - ./wordpress:/var/www/html
+      # - /home/ayzapata/data/wordpress:/var/www/html
     depends_on:
       - wordpress
     networks:
       - my_inception_net
-    # restart: on-failure
+    restart: on-failure
 
   mysqldb:
     build:
@@ -54,37 +66,40 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DOMAIN_NAME: ${DOMAIN_NAME}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
+      WORDPRESS_DB_USER2: ${WORDPRESS_DB_USER2}
+      WORDPRESS_USER2_EMAIL: ${WORDPRESS_USER2_EMAIL}
+      WORDPRESS_USER2_PASSWORD2: ${WORDPRESS_USER2_PASSWORD2}
     ports:
       - "3306"
     volumes:
-      - /home/ayzapata/data/mysqldata:/var/lib/mysql
-    # restart: on-failure
+      - ./mysqldata:/var/lib/mysql
+      # - /home/ayzapata/data/mysqldata:/var/lib/mysql
+    restart: on-failure
     networks:
       - my_inception_net
 
-  adminer:
-    build:
-      context: ./requirements/adminer
-    container_name: adminer
-    env_file: 
-      - .env
-    environment:
-      ADMINER_DEFAULT_SERVER: mysqldb
-      ADMINER_DESIGN: vane
-    ports:
-      - "3306"
-    networks:
-      - my_inception_net
-    # restart: on-failure
+  # adminer:
+  #   build:
+  #     context: ./requirements/adminer
+  #   container_name: adminer
+  #   env_file: 
+  #     - .env
+  #   environment:
+  #     ADMINER_DEFAULT_SERVER: mysqldb
+  #     ADMINER_DESIGN: vane
+  #   ports:
+  #     - "3306"
+  #   networks:
+  #     - my_inception_net
+  #   # restart: on-failure
 
 networks:
   my_inception_net:
     driver: bridge
-
-# volumes:
-#     mysqldata: 
-#     wordpress: 

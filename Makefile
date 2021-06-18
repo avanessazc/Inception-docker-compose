@@ -15,7 +15,9 @@ SRCS = ./srcs
 
 HOME = /home
 USER = /ayzapata
-
+DATA = /data
+MYSQL_VOLUME = /mysqldata
+WORDPRESS_VOLUME = /wordpress
 RET = $(shell docker ps -a -q)
 
 all:	up
@@ -24,8 +26,10 @@ build:	# Build the images
 		@cd $(SRCS) && docker-compose build
 
 up: 	
-		# @service nginx stop
-		# @service mysql stop
+		@service nginx stop
+		@service mysql stop
+		@mkdir -p $(HOME)$(USER)$(DATA)$(MYSQL_VOLUME)
+		@mkdir -p $(HOME)$(USER)$(DATA)$(WORDPRESS_VOLUME)
 		@cd $(SRCS) && docker-compose up -d
 
 down: 	

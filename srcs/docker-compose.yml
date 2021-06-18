@@ -21,8 +21,7 @@ services:
     ports:
       - "9000"
     volumes:
-      - ./wordpress:/var/www/html
-      # - /home/ayzapata/data/wordpress:/var/www/html
+      - wordpress:/var/www/html
     depends_on:
       - mysqldb
     networks:
@@ -35,21 +34,10 @@ services:
     container_name: nginx
     env_file:
       - .env
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      WORDPRESS_USER_EMAIL: ${WORDPRESS_USER_EMAIL}
-      WORDPRESS_DB_USER2: ${WORDPRESS_DB_USER2}
-      WORDPRESS_USER2_EMAIL: ${WORDPRESS_USER2_EMAIL}
-      WORDPRESS_USER2_PASSWORD2: ${WORDPRESS_USER2_PASSWORD2}
     ports:
       - "443:443"
     volumes:
-      - ./wordpress:/var/www/html
-      # - /home/ayzapata/data/wordpress:/var/www/html
+      - wordpress:/var/www/html
     depends_on:
       - wordpress
     networks:
@@ -79,27 +67,25 @@ services:
     ports:
       - "3306"
     volumes:
-      - ./mysqldata:/var/lib/mysql
-      # - /home/ayzapata/data/mysqldata:/var/lib/mysql
+      - mysqldata:/var/lib/mysql
     restart: on-failure
     networks:
       - my_inception_net
 
-  # adminer:
-  #   build:
-  #     context: ./requirements/adminer
-  #   container_name: adminer
-  #   env_file: 
-  #     - .env
-  #   environment:
-  #     ADMINER_DEFAULT_SERVER: mysqldb
-  #     ADMINER_DESIGN: vane
-  #   ports:
-  #     - "3306"
-  #   networks:
-  #     - my_inception_net
-  #   # restart: on-failure
-
 networks:
   my_inception_net:
     driver: bridge
+  
+volumes:
+  mysqldata:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/ayzapata/data/mysqldata
+  wordpress:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/ayzapata/data/wordpress

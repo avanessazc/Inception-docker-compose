@@ -15,7 +15,7 @@ chmod +x /bin/wp
 
 # setup users
 wp core install --allow-root --url=https://$DOMAIN_NAME/ \
---title="Mi sitio Web: INCEPTION" \
+--title="INCEPTION - 42PROJECT" \
 --admin_user=$WORDPRESS_DB_USER \
 --admin_password=$WORDPRESS_DB_PASSWORD \
 --admin_email=$WORDPRESS_USER_EMAIL \

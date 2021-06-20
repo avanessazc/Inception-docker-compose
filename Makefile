@@ -3,14 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: avanezc <avanezc@student.42.fr>            +#+  +:+       +#+         #
+#    By: ayzapata <ayzapata@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/22 13:53:20 by ayzapata          #+#    #+#              #
-#    Updated: 2021/06/16 12:34:51 by avanezc          ###   ########.fr        #
+#    Updated: 2021/06/16 12:34:51 by ayzapata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# SRCS = /home/user42/Bureau/inception/srcs
 SRCS = ./srcs
 
 HOME = /home
@@ -18,11 +17,12 @@ USER = /ayzapata
 DATA = /data
 MYSQL_VOLUME = /mysqldata
 WORDPRESS_VOLUME = /wordpress
-RET = $(shell docker ps -a -q)
+
+RET = $(shell docker ps -qa)
 
 all:	up
 
-build:	# Build the images
+build:	
 		@cd $(SRCS) && docker-compose build
 
 up: 	
@@ -57,10 +57,9 @@ del_images: stop_containers
 		
 fclean: del_containers del_images prune 
 
-
-del_volumes: 
+del_volumes_dir: 
 		@rm -rf $(HOME)$(USER)
 
 re: fclean all
 
-.PHONY: re, build, up, down, prune, stop_containers, del_images, del_containers, del_volumes, fclean
+.PHONY: re, build, up, down, prune, stop_containers, del_images, del_containers, del_volumes_dir, fclean

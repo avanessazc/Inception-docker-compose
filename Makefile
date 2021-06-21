@@ -40,14 +40,14 @@ prune:  down
 
 stop_containers:	
 ifneq "$(RET)" "0"
-	@echo "There are not containers running"
+	@echo "There are no running containers"
 else
 	@docker stop $(RET)
 endif
 
 del_containers: stop_containers	
 ifneq "$(RET)" "0"
-	@echo "There are not containers to delete"
+	@echo "There are no containers to delete"
 else
 	@docker rm $(RET)
 endif
